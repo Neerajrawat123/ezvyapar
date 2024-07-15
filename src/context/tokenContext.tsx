@@ -3,7 +3,7 @@ import {  useState, ReactNode } from "react";
 import { createContext } from "react";
 
 interface AuthContextType {
-    token: string | null;
+    token: null | string;
     setToken: (token: string | null) => void;
   }
   
