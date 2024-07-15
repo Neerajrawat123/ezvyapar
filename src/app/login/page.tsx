@@ -13,8 +13,9 @@ function Register() {
 const [password, setPassword] = useState('')
 const [username, setUsername] = useState('')
 const [loading, setLoading] = useState(true)
-const {setToken} = useContext(AuthContext)
+const authContext = useContext(AuthContext); // Get the context object
 
+const { token = null, setToken = () => {} } = authContext || {};  
 
 async function submit(e: FormEvent<HTMLFormElement>) {
   e.preventDefault();

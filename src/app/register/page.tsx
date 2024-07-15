@@ -12,15 +12,16 @@ function Register() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
-  const { setToken} = useContext(AuthContext)
-  const router = useRouter()
+  const authContext = useContext(AuthContext); // Get the context object
+
+  const { token = null, setToken = () => {} } = authContext || {};    const router = useRouter()
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     console.log("working");
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:4000/api/register", {
+      const res = await axios.post(`${process.env.BACKEND_URL}/api/register`, {
         username,
         password,
       });

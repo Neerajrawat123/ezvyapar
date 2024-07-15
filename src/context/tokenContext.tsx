@@ -1,30 +1,20 @@
 'use client'
-import {  useState, ReactNode } from "react";
-import { createContext } from "react";
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from "react";
 
 interface AuthContextType {
-    token: null | string;
-    setToken: (token: string | null) => void;
-  }
-  
-  const initialAuthContext: AuthContextType = {
-    token: null,
-    setToken: () => {},
-  };
-
-export const AuthContext = createContext(null)
-
-const AuthProvider = ({children}:{children: ReactNode} ) => {
-    const [token, setToken] = useState<string | null>(null);
-
-    return (
-        <AuthContext.Provider value={{ token,setToken}}>
-            {children}
-
-        </AuthContext.Provider>
-    )
-
-
+  token: string | null;
+  setToken: Dispatch<SetStateAction<string | null>>;
 }
 
-export default AuthProvider
+export const AuthContext = createContext<AuthContextType | null>(null);
+
+// AuthProvider component to provide the context value
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(null);
+
+  return (
+    <AuthContext.Provider value={{ token, setToken }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

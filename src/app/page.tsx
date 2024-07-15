@@ -4,19 +4,19 @@ import { useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import { redirect, useRouter } from "next/navigation";
-import { cookies } from "next/headers";
+import {  useRouter } from "next/navigation";
 import { AuthContext } from "@/context/tokenContext";
 
 export default function Home() {
-  const { token , setToken } = useContext(AuthContext)
-  
+  const authContext = useContext(AuthContext); // Get the context object
+  const url :string = process.env.BACKEND_URL || ''
+
+  const { token = null, setToken = () => {} } = authContext || {};  
   const router = useRouter();
   if (!token) {
     router.push("/login");
   }
 
-  const notificatiosQueue: [string] | [] = [];
   const { toast } = useToast();
 
   const [users, setUsers] = useState([]);
@@ -26,28 +26,25 @@ export default function Home() {
   useEffect(() => {
     
  
-      let socketInstance = io("http://localhost:4000", {
+      let socketInstance = io(url, {
         autoConnect: false,
         auth:{token}
   });
       socketInstance.connect();
       setSocket(socketInstance);
 
-      socketInstance.on("connect", (socket) => {
+      socketInstance.on("connect", () => {
         console.log("socket is connected using", socketInstance.id);
       });
 
       socketInstance.on("users", (usersData) => {
-        let users = usersData.filter((usr) => usr[1] !== socketInstance.id);
-        let myId = usersData.filter((id) => id[1] === socketInstance.id)
-        console.log(user, myId)
-
+        let users = usersData.filter((usr:[string,string]) => usr[1] !== socketInstance.id);
+        let myId = usersData.filter((id:[string,string]) => id[1] === socketInstance.id)
         setUsers(users);
         setMyId(myId[0])
       });
 
-      socketInstance.on("ping", (from: string) => {
-        notificatiosQueue.push(from);
+      socketInstance.on("ping", (from: string ) => {
         toast({
           title: "Toast Notification",
           description: `${from} send you ping`,
@@ -60,7 +57,7 @@ export default function Home() {
       socketInstance.off("ping");
     };
   
-  }, [token]);
+  }, []);
 
   function sendNotification() {
     socket?.emit("sendToall", myId);
