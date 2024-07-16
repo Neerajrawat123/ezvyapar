@@ -9,7 +9,7 @@ import { AuthContext } from "@/context/tokenContext";
 
 export default function Home() {
   const authContext = useContext(AuthContext); // Get the context object
-  const url :string = process.env.BACKEND_URL || ''
+  const url :string = process.env.NEXT_PUBLIC_BACKEND_URL || ''
 
   const { token = null, setToken = () => {} } = authContext || {};  
   const router = useRouter();

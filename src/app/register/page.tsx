@@ -6,7 +6,7 @@ import { AuthContext } from "@/context/tokenContext";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, MouseEventHandler, useContext, useState } from "react";
 
 function Register() {
   const [password, setPassword] = useState("");
@@ -18,10 +18,9 @@ function Register() {
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     console.log("working");
-    e.preventDefault();
 
     try {
-      const res = await axios.post(`${process.env.BACKEND_URL}/api/register`, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/register`, {
         username,
         password,
       });
@@ -68,7 +67,7 @@ function Register() {
             </div>
           </div>
           <div className="flex justify-center py-6">
-            <Button size="full" onClick={(e) => submit}>
+            <Button size="full" onClick={(e:any) => submit(e)}>
               Register
             </Button>
           </div>

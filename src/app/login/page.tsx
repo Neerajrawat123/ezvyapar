@@ -21,7 +21,7 @@ async function submit(e: FormEvent<HTMLFormElement>) {
   e.preventDefault();
 
     try {
-      const res = await axios.post(`${process.env.BACKEND_URL}/api/login`, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login`, {
         username,
         password,
       });
@@ -60,7 +60,7 @@ async function submit(e: FormEvent<HTMLFormElement>) {
             </div>
           </div>
           <div className="flex justify-center py-6">
-            <Button size="full" onClick={(e) => submit}>
+            <Button size="full" onClick={(e:any) => submit(e)}>
               Login
             </Button>
           </div>
