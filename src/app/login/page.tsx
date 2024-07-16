@@ -13,6 +13,7 @@ function Register() {
 const [password, setPassword] = useState('')
 const [username, setUsername] = useState('')
 const [loading, setLoading] = useState(true)
+const [error, setError] = useState(null)
 const authContext = useContext(AuthContext); // Get the context object
 
 const { token = null, setToken = () => {} } = authContext || {};  
@@ -27,13 +28,14 @@ async function submit(e: FormEvent<HTMLFormElement>) {
       });
 
       
-      if (res.status === 201) {
+      if (res.status === 200) {
         let token = res?.data?.token;
         setToken(token)
         redirect("/");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error:any) {
+      setError(error.response.data.message)
+      console.log(error.response);
       setLoading(false);
     }
 
@@ -63,6 +65,9 @@ async function submit(e: FormEvent<HTMLFormElement>) {
             <Button size="full" onClick={(e:any) => submit(e)}>
               Login
             </Button>
+          </div>
+          <div>
+            {error && (<h4 className="text-red-700 text-center">{error}</h4>)}
           </div>
           <div className="flex gap-2 text-xl items-center">
             <h3 className="">Do not have a account 

@@ -11,6 +11,7 @@ import { FormEvent, MouseEventHandler, useContext, useState } from "react";
 function Register() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [error, setError] = useState(null)
   const [loading, setLoading] = useState<boolean>(true);
   const authContext = useContext(AuthContext); // Get the context object
 
@@ -31,7 +32,9 @@ function Register() {
         router.push('/')
         setLoading(false)
       }
-    } catch (error) {
+    } catch (error:any) {
+      setError(error.response.data.message)
+
       console.log(error);
       setLoading(false);
     }
@@ -70,6 +73,9 @@ function Register() {
             <Button size="full" onClick={(e:any) => submit(e)}>
               Register
             </Button>
+          </div>
+          <div>
+            {error && (<h4 className="text-red-700 text-center">{error}</h4>)}
           </div>
           <div className="flex gap-2 text-xl items-center">
             <h3 className="">Do not have a account</h3>
